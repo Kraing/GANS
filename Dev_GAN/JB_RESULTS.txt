@@ -1,0 +1,270 @@
+def build_discriminator(input_shape):
+
+    # Initialize the NN
+    model = Sequential()
+
+    # First convolutional layer
+    model.add(Conv2D(64, 3, strides=2, padding='same', input_shape=input_shape))
+    model.add(LeakyReLU(alpha=0.2))
+    model.add(Dropout(0.4))
+
+    # Second convolutional layer
+    model.add(Conv2D(128, 3, strides=2, padding='same'))
+    model.add(LeakyReLU(alpha=0.2))
+    model.add(Dropout(0.4))
+
+
+    # Flattening and output layer
+    model.add(Flatten())
+    model.add(Dense(1, activation='sigmoid'))
+
+    opt = Adam(lr=0.0002, beta_1=0.5)
+    model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
+    return model
+
+
+def build_generator(latent_dim=100):
+
+    # Initialize the NN
+    model = Sequential()
+
+    # Fully connected layer
+    model.add(Dense(7 * 7 * 256, input_dim=latent_dim))
+    model.add(BatchNormalization(momentum=0.9))
+    model.add(LeakyReLU(alpha=0.2))
+    model.add(Reshape((7, 7, 256)))
+    model.add(Dropout(0.4))
+    
+    # First upsampling layer 14x14
+    model.add(UpSampling2D())
+    model.add(Conv2D(128, 3, padding='same'))
+    model.add(BatchNormalization(momentum=0.9))
+    model.add(LeakyReLU(alpha=0.2))
+    
+    # Second upsampling layer 28x28
+    model.add(UpSampling2D())
+    model.add(Conv2D(64, 3, padding='same'))
+    model.add(BatchNormalization(momentum=0.9))
+    model.add(LeakyReLU(alpha=0.2))
+    
+    # Second upsampling layer 28x28
+    model.add(Conv2D(32, 3, padding='same'))
+    model.add(BatchNormalization(momentum=0.9))
+    model.add(LeakyReLU(alpha=0.2))
+    
+    
+    # Output layer
+    model.add(Conv2D(1, 3, activation='tanh', padding='same'))
+    return model
+
+
+
+MNIST-RESULTS
+Epoch-0: dl=0.645 gl=0.631 da=0.581 ga=0.579 time=33.982920
+Epoch-1: dl=0.694 gl=0.716 da=0.518 ga=0.401 time=29.329245
+Epoch-2: dl=0.690 gl=0.714 da=0.533 ga=0.404 time=29.298133
+Epoch-3: dl=0.689 gl=0.711 da=0.535 ga=0.411 time=29.296744
+Epoch-4: dl=0.690 gl=0.705 da=0.535 ga=0.434 time=29.325382
+Epoch-5: dl=0.690 gl=0.705 da=0.530 ga=0.434 time=29.978859
+Epoch-6: dl=0.691 gl=0.706 da=0.528 ga=0.442 time=29.324514
+Epoch-7: dl=0.691 gl=0.705 da=0.525 ga=0.442 time=29.360228
+Epoch-8: dl=0.691 gl=0.705 da=0.523 ga=0.450 time=29.564033
+Epoch-9: dl=0.692 gl=0.704 da=0.523 ga=0.448 time=29.711005
+Epoch-10: dl=0.691 gl=0.704 da=0.523 ga=0.445 time=29.662219
+Epoch-11: dl=0.691 gl=0.703 da=0.522 ga=0.449 time=30.159761
+Epoch-12: dl=0.691 gl=0.704 da=0.525 ga=0.444 time=29.555828
+Epoch-13: dl=0.691 gl=0.703 da=0.528 ga=0.442 time=29.434860
+Epoch-14: dl=0.691 gl=0.703 da=0.524 ga=0.447 time=29.614951
+Epoch-15: dl=0.691 gl=0.704 da=0.529 ga=0.442 time=29.796864
+Epoch-16: dl=0.690 gl=0.703 da=0.531 ga=0.449 time=29.554883
+Epoch-17: dl=0.691 gl=0.703 da=0.530 ga=0.449 time=29.471277
+Epoch-18: dl=0.691 gl=0.705 da=0.529 ga=0.444 time=29.449510
+Epoch-19: dl=0.691 gl=0.704 da=0.528 ga=0.448 time=29.450660
+
+
+FASHION-MNIST-RESULTS
+Epoch-0: dl=0.670 gl=0.603 da=0.526 ga=0.600 time=33.184485
+Epoch-1: dl=0.685 gl=0.716 da=0.553 ga=0.404 time=29.651748
+Epoch-2: dl=0.669 gl=0.727 da=0.608 ga=0.347 time=29.695045
+Epoch-3: dl=0.683 gl=0.735 da=0.554 ga=0.364 time=29.459022
+Epoch-4: dl=0.687 gl=0.722 da=0.540 ga=0.394 time=29.489624
+Epoch-5: dl=0.685 gl=0.723 da=0.550 ga=0.414 time=29.474280
+Epoch-6: dl=0.682 gl=0.723 da=0.562 ga=0.416 time=29.466866
+Epoch-7: dl=0.685 gl=0.722 da=0.549 ga=0.410 time=29.917376
+Epoch-8: dl=0.682 gl=0.716 da=0.560 ga=0.432 time=30.103362
+Epoch-9: dl=0.681 gl=0.723 da=0.558 ga=0.439 time=29.734478
+Epoch-10: dl=0.684 gl=0.724 da=0.556 ga=0.407 time=29.467281
+Epoch-11: dl=0.684 gl=0.719 da=0.553 ga=0.417 time=29.504580
+Epoch-12: dl=0.686 gl=0.720 da=0.546 ga=0.423 time=29.741446
+Epoch-13: dl=0.685 gl=0.720 da=0.549 ga=0.428 time=29.951089
+Epoch-14: dl=0.687 gl=0.718 da=0.547 ga=0.422 time=29.530810
+Epoch-15: dl=0.688 gl=0.716 da=0.544 ga=0.423 time=29.813845
+Epoch-16: dl=0.685 gl=0.714 da=0.551 ga=0.439 time=29.453116
+Epoch-17: dl=0.684 gl=0.719 da=0.555 ga=0.422 time=29.655305
+Epoch-18: dl=0.685 gl=0.718 da=0.552 ga=0.421 time=30.377166
+Epoch-19: dl=0.685 gl=0.716 da=0.553 ga=0.437 time=30.374309
+
+
+
+
+
+## Test increasing latent-space and powerup discriminator
+def build_discriminator(input_shape):
+
+    # Initialize the NN
+    model = Sequential()
+
+    # First convolutional layer
+    model.add(Conv2D(128, 3, strides=2, padding='same', input_shape=input_shape))
+    model.add(LeakyReLU(alpha=0.2))
+    model.add(Dropout(0.4))
+
+    # Second convolutional layer
+    model.add(Conv2D(256, 3, strides=2, padding='same'))
+    model.add(LeakyReLU(alpha=0.2))
+    model.add(Dropout(0.4))
+    
+    # Second convolutional layer
+    model.add(Conv2D(512, 3, strides=2, padding='same'))
+    model.add(LeakyReLU(alpha=0.2))
+    model.add(Dropout(0.4))
+
+    # Flattening and output layer
+    model.add(Flatten())
+    model.add(Dense(1, activation='sigmoid'))
+
+    opt = Adam(lr=0.0002, beta_1=0.5)
+    model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
+    return model
+
+Both lead to better discriminator performance overall, but worsening the generator accuracy
+maybe the discriminator is too strong.
+Generated images are not very clear.
+
+MNIST-RESULTS
+Epoch-0: dl=0.610 gl=0.738 da=0.632 ga=0.422 time=45.091486
+Epoch-1: dl=0.674 gl=0.787 da=0.582 ga=0.317 time=39.743758
+Epoch-2: dl=0.678 gl=0.756 da=0.572 ga=0.359 time=39.157260
+Epoch-3: dl=0.676 gl=0.762 da=0.578 ga=0.348 time=39.084659
+Epoch-4: dl=0.674 gl=0.766 da=0.580 ga=0.353 time=39.506247
+Epoch-5: dl=0.674 gl=0.771 da=0.580 ga=0.342 time=39.092907
+Epoch-6: dl=0.674 gl=0.775 da=0.580 ga=0.347 time=39.553599
+Epoch-7: dl=0.672 gl=0.776 da=0.586 ga=0.352 time=39.294009
+Epoch-8: dl=0.673 gl=0.776 da=0.583 ga=0.354 time=39.224422
+Epoch-9: dl=0.674 gl=0.772 da=0.579 ga=0.361 time=39.707254
+Epoch-10: dl=0.675 gl=0.771 da=0.578 ga=0.364 time=39.123871
+Epoch-11: dl=0.674 gl=0.769 da=0.580 ga=0.367 time=39.149514
+Epoch-12: dl=0.674 gl=0.772 da=0.581 ga=0.362 time=39.309760
+Epoch-13: dl=0.672 gl=0.773 da=0.581 ga=0.365 time=39.081893
+Epoch-14: dl=0.671 gl=0.774 da=0.585 ga=0.369 time=39.092097
+Epoch-15: dl=0.673 gl=0.776 da=0.582 ga=0.366 time=39.086051
+Epoch-16: dl=0.672 gl=0.774 da=0.583 ga=0.369 time=39.157362
+Epoch-17: dl=0.671 gl=0.780 da=0.584 ga=0.366 time=39.079072
+Epoch-18: dl=0.672 gl=0.781 da=0.582 ga=0.367 time=39.217725
+Epoch-19: dl=0.670 gl=0.778 da=0.587 ga=0.369 time=40.666464
+
+
+FASHION-MNIST-RESULTS
+Epoch-0: dl=0.627 gl=0.662 da=0.614 ga=0.461 time=44.562486
+Epoch-1: dl=0.531 gl=0.845 da=0.749 ga=0.418 time=40.669878
+Epoch-2: dl=0.587 gl=0.970 da=0.690 ga=0.300 time=40.151058
+Epoch-3: dl=0.617 gl=0.887 da=0.660 ga=0.306 time=40.179209
+Epoch-4: dl=0.633 gl=0.891 da=0.643 ga=0.283 time=39.830391
+Epoch-5: dl=0.631 gl=0.885 da=0.643 ga=0.293 time=39.399853
+Epoch-6: dl=0.641 gl=0.871 da=0.629 ga=0.301 time=39.960464
+Epoch-7: dl=0.643 gl=0.871 da=0.627 ga=0.296 time=40.209761
+Epoch-8: dl=0.643 gl=0.867 da=0.626 ga=0.302 time=40.365022
+Epoch-9: dl=0.643 gl=0.869 da=0.625 ga=0.303 time=40.052614
+Epoch-10: dl=0.646 gl=0.866 da=0.623 ga=0.306 time=40.102056
+Epoch-11: dl=0.640 gl=0.875 da=0.632 ga=0.303 time=40.023173
+Epoch-12: dl=0.643 gl=0.874 da=0.626 ga=0.302 time=39.017703
+Epoch-13: dl=0.641 gl=0.883 da=0.626 ga=0.297 time=38.458709
+Epoch-14: dl=0.644 gl=0.882 da=0.622 ga=0.296 time=38.455492
+Epoch-15: dl=0.644 gl=0.882 da=0.625 ga=0.295 time=38.418209
+Epoch-16: dl=0.641 gl=0.884 da=0.628 ga=0.296 time=38.420958
+Epoch-17: dl=0.643 gl=0.883 da=0.626 ga=0.300 time=38.460874
+Epoch-18: dl=0.644 gl=0.885 da=0.625 ga=0.298 time=38.674351
+Epoch-19: dl=0.643 gl=0.879 da=0.623 ga=0.304 time=38.424349
+
+
+## UPGRADE ALSO GENERATOR
+
+def build_generator(latent_dim=100):
+
+    # Initialize the NN
+    model = Sequential()
+
+    # Fully connected layer
+    model.add(Dense(7 * 7 * 512, input_dim=latent_dim))
+    model.add(BatchNormalization(momentum=0.9))
+    model.add(LeakyReLU(alpha=0.2))
+    model.add(Reshape((7, 7, 512)))
+    model.add(Dropout(0.4))
+
+    # First upsampling layer 14x14
+    model.add(UpSampling2D())
+    model.add(Conv2D(256, 3, padding='same'))
+    model.add(BatchNormalization(momentum=0.9))
+    model.add(LeakyReLU(alpha=0.2))
+    
+    # Second upsampling layer 28x28
+    model.add(UpSampling2D())
+    model.add(Conv2D(128, 3, padding='same'))
+    model.add(BatchNormalization(momentum=0.9))
+    model.add(LeakyReLU(alpha=0.2))
+    
+    # Second upsampling layer 28x28
+    model.add(Conv2D(64, 3, padding='same'))
+    model.add(BatchNormalization(momentum=0.9))
+    model.add(LeakyReLU(alpha=0.2))
+    
+    # Output layer
+    model.add(Conv2D(1, 3, activation='tanh', padding='same'))
+    return model
+
+The two losses and accuracy rebalanced a bit, random generated images are better for digits.
+Fashion MNIST parameters get just a bit better, overall generated images are still bad
+
+MNIST-RESULTS
+Epoch-0: dl=0.623 gl=0.646 da=0.574 ga=0.505 time=71.220645
+Epoch-1: dl=0.690 gl=0.716 da=0.532 ga=0.391 time=65.535839
+Epoch-2: dl=0.687 gl=0.719 da=0.547 ga=0.397 time=65.421155
+Epoch-3: dl=0.685 gl=0.726 da=0.554 ga=0.389 time=65.423038
+Epoch-4: dl=0.682 gl=0.734 da=0.562 ga=0.386 time=65.413205
+Epoch-5: dl=0.681 gl=0.739 da=0.562 ga=0.391 time=65.430457
+Epoch-6: dl=0.679 gl=0.746 da=0.569 ga=0.387 time=65.434224
+Epoch-7: dl=0.677 gl=0.752 da=0.573 ga=0.392 time=65.452422
+Epoch-8: dl=0.675 gl=0.763 da=0.576 ga=0.379 time=65.399643
+Epoch-9: dl=0.674 gl=0.760 da=0.576 ga=0.391 time=65.411347
+Epoch-10: dl=0.673 gl=0.764 da=0.581 ga=0.384 time=65.437636
+Epoch-11: dl=0.673 gl=0.766 da=0.583 ga=0.390 time=65.417270
+Epoch-12: dl=0.673 gl=0.767 da=0.580 ga=0.389 time=65.400927
+Epoch-13: dl=0.672 gl=0.770 da=0.582 ga=0.385 time=65.842083
+Epoch-14: dl=0.671 gl=0.771 da=0.583 ga=0.393 time=65.445494
+Epoch-15: dl=0.672 gl=0.769 da=0.583 ga=0.391 time=65.414110
+Epoch-16: dl=0.671 gl=0.773 da=0.585 ga=0.390 time=65.419527
+Epoch-17: dl=0.674 gl=0.764 da=0.580 ga=0.393 time=65.444951
+Epoch-18: dl=0.673 gl=0.766 da=0.580 ga=0.397 time=65.476376
+Epoch-19: dl=0.674 gl=0.767 da=0.578 ga=0.393 time=65.447422
+
+FASHION-MNIST-RESULTS
+Epoch-0: dl=0.660 gl=0.625 da=0.546 ga=0.557 time=69.101049
+Epoch-1: dl=0.671 gl=0.731 da=0.591 ga=0.374 time=65.502671
+Epoch-2: dl=0.672 gl=0.760 da=0.585 ga=0.358 time=65.453569
+Epoch-3: dl=0.652 gl=0.778 da=0.616 ga=0.370 time=65.483100
+Epoch-4: dl=0.660 gl=0.790 da=0.605 ga=0.354 time=65.475641
+Epoch-5: dl=0.667 gl=0.783 da=0.592 ga=0.343 time=65.479199
+Epoch-6: dl=0.663 gl=0.787 da=0.601 ga=0.357 time=65.465931
+Epoch-7: dl=0.659 gl=0.796 da=0.608 ga=0.356 time=65.497054
+Epoch-8: dl=0.665 gl=0.785 da=0.592 ga=0.359 time=66.147664
+Epoch-9: dl=0.670 gl=0.781 da=0.585 ga=0.350 time=65.849646
+Epoch-10: dl=0.669 gl=0.781 da=0.585 ga=0.351 time=66.176798
+Epoch-11: dl=0.668 gl=0.779 da=0.589 ga=0.362 time=65.665051
+Epoch-12: dl=0.666 gl=0.791 da=0.594 ga=0.346 time=65.527933
+Epoch-13: dl=0.667 gl=0.786 da=0.588 ga=0.357 time=65.496222
+Epoch-14: dl=0.670 gl=0.785 da=0.585 ga=0.348 time=68.522987
+Epoch-15: dl=0.668 gl=0.790 da=0.588 ga=0.344 time=67.588303
+Epoch-16: dl=0.669 gl=0.788 da=0.585 ga=0.350 time=66.258944
+Epoch-17: dl=0.666 gl=0.792 da=0.593 ga=0.353 time=66.466005
+Epoch-18: dl=0.669 gl=0.790 da=0.587 ga=0.345 time=65.493692
+Epoch-19: dl=0.666 gl=0.790 da=0.591 ga=0.356 time=65.459855
