@@ -268,3 +268,28 @@ Epoch-16: dl=0.669 gl=0.788 da=0.585 ga=0.350 time=66.258944
 Epoch-17: dl=0.666 gl=0.792 da=0.593 ga=0.353 time=66.466005
 Epoch-18: dl=0.669 gl=0.790 da=0.587 ga=0.345 time=65.493692
 Epoch-19: dl=0.666 gl=0.790 da=0.591 ga=0.356 time=65.459855
+
+
+
+## DISCRIMINATOR WITH BATCH-NORMALIZATION
+
+Epoch- 0: dl=0.533 gl=1.186   da_r=0.718 da_f=0.707   ga=0.331   time=56.938
+Epoch- 1: dl=0.525 gl=1.552   da_r=0.748 da_f=0.721   ga=0.140   time=52.434
+Epoch- 2: dl=0.633 gl=1.458   da_r=0.652 da_f=0.640   ga=0.162   time=52.348
+Epoch- 3: dl=0.667 gl=1.344   da_r=0.624 da_f=0.614   ga=0.182   time=52.392
+Epoch- 4: dl=0.686 gl=1.267   da_r=0.601 da_f=0.595   ga=0.205   time=52.387
+Epoch- 5: dl=0.708 gl=1.188   da_r=0.575 da_f=0.575   ga=0.230   time=52.365
+Epoch- 6: dl=0.715 gl=1.144   da_r=0.567 da_f=0.565   ga=0.242   time=52.708
+Epoch- 7: dl=0.722 gl=1.115   da_r=0.556 da_f=0.559   ga=0.248   time=52.873
+Epoch- 8: dl=0.720 gl=1.082   da_r=0.556 da_f=0.553   ga=0.254   time=52.442
+Epoch- 9: dl=0.726 gl=1.049   da_r=0.546 da_f=0.541   ga=0.267   time=52.508
+Epoch-10: dl=0.725 gl=1.019   da_r=0.545 da_f=0.540   ga=0.278   time=53.052
+Epoch-11: dl=0.731 gl=1.000   da_r=0.530 da_f=0.532   ga=0.280   time=52.718
+Epoch-12: dl=0.732 gl=0.986   da_r=0.526 da_f=0.529   ga=0.283   time=52.400
+Epoch-13: dl=0.729 gl=0.971   da_r=0.527 da_f=0.529   ga=0.290   time=52.780
+Epoch-14: dl=0.733 gl=0.953   da_r=0.517 da_f=0.523   ga=0.292   time=52.604
+Epoch-15: dl=0.733 gl=0.943   da_r=0.515 da_f=0.517   ga=0.293   time=52.510
+Epoch-16: dl=0.736 gl=0.929   da_r=0.506 da_f=0.506   ga=0.296   time=52.509
+Epoch-17: dl=0.730 gl=0.914   da_r=0.512 da_f=0.518   ga=0.305   time=53.008
+Epoch-18: dl=0.728 gl=0.908   da_r=0.511 da_f=0.515   ga=0.301   time=53.537
+Epoch-19: dl=0.731 gl=0.897   da_r=0.507 da_f=0.506   ga=0.307   time=52.363
